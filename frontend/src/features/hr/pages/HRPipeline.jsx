@@ -86,7 +86,8 @@ const HRPipeline = () => {
     try {
       const token = localStorage.getItem('token');
 
-      const response = await fetch(`http://localhost:5000/api/applications/${appId}/status`, {
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      const response = await fetch(`${BACKEND_URL}/api/applications/${appId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
