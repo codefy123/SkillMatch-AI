@@ -63,7 +63,7 @@ const ApplyModal = ({ job, user, onClose }) => {
           const formData = new FormData();
           formData.append('file', file);
           
-          const uploadRes = await fetch(`${AI_SERVICE_URL}/upload-resume/`, {
+          const uploadRes = await fetch(`${AI_SERVICE_URL}upload-resume/`, {
             method: 'POST',
             body: formData
           });
