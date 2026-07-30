@@ -12,7 +12,7 @@ app.use('/api/jobs', jobRoutes);
 app.use('/api/applications', applicationRoutes);
 
 app.get('/', (req, res) => {
-    res.send('NexusAI Enterprise API is running...');
+    res.send('SkillMatch-Ai Enterprise API is running...');
 });
 
 const PORT = process.env.PORT || 5000;
