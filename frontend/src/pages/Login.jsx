@@ -15,15 +15,12 @@ const Login = ({ setUser }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
+      const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
       });
 
       const data = await response.json();
@@ -33,7 +30,7 @@ const Login = ({ setUser }) => {
       }
 
       localStorage.setItem('token', data.token);
-      
+
       const loggedInUser = {
         email: data.user.email,
         role: data.user.role,
@@ -42,7 +39,7 @@ const Login = ({ setUser }) => {
 
       localStorage.setItem('user', JSON.stringify(loggedInUser));
       setUser(loggedInUser);
-      
+
       navigate(loggedInUser.role === 'hr' ? '/hr' : '/student');
 
     } catch (err) {
@@ -69,7 +66,7 @@ const Login = ({ setUser }) => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-sm border border-zinc-200 sm:rounded-2xl sm:px-10">
           <form className="space-y-6" onSubmit={handleLogin}>
-            
+
             {error && (
               <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm flex items-center gap-2 border border-red-100">
                 <AlertCircle size={16} /> {error}
