@@ -29,10 +29,10 @@ const HRDashboard = ({ user }) => {
         const token = localStorage.getItem('token');
         if (!token) return;
 
-        // Fetch jobs and applications simultaneously
+        const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
         const [jobsRes, appsRes] = await Promise.all([
-          fetch('http://localhost:5000/api/jobs/me', { headers: { 'Authorization': `Bearer ${token}` } }),
-          fetch('http://localhost:5000/api/applications/hr', { headers: { 'Authorization': `Bearer ${token}` } })
+          fetch(`${BACKEND_URL}/api/jobs/me`, { headers: { 'Authorization': `Bearer ${token}` } }),
+          fetch(`${BACKEND_URL}/api/applications/hr`, { headers: { 'Authorization': `Bearer ${token}` } })
         ]);
 
         if (jobsRes.ok) {
