@@ -51,6 +51,9 @@ const ApplyModal = ({ job, user, onClose }) => {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Authentication token missing. Please log in again.');
 
+      const AI_SERVICE_URL = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:8000';
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
       let exactAiScore = 0;
       let missingSkills = [];
       let currentResumeId = null;
@@ -60,7 +63,7 @@ const ApplyModal = ({ job, user, onClose }) => {
           const formData = new FormData();
           formData.append('file', file);
           
-          const uploadRes = await fetch('http://localhost:8000/upload-resume/', {
+          const uploadRes = await fetch(`${AI_SERVICE_URL}/upload-resume/`, {
             method: 'POST',
             body: formData
           });
@@ -71,7 +74,7 @@ const ApplyModal = ({ job, user, onClose }) => {
           currentResumeId = uploadData.resume_id; 
         }
 
-        const pythonResponse = await fetch('http://localhost:8000/search-resumes/', {
+        const pythonResponse = await fetch(`${AI_SERVICE_URL}/search-resumes/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -96,7 +99,7 @@ const ApplyModal = ({ job, user, onClose }) => {
         throw new Error(aiError.message || "AI Evaluation failed. Ensure your Python backend is running.");
       }
 
-      const response = await fetch('http://localhost:5000/api/applications', {
+      const response = await fetch(`${BACKEND_URL}/api/applications`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -131,7 +134,6 @@ const ApplyModal = ({ job, user, onClose }) => {
     }
   };
 
-  // Prevent clicking outside from closing if currently submitting
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget && !isSubmitting && !success) {
       onClose();
@@ -185,7 +187,6 @@ const ApplyModal = ({ job, user, onClose }) => {
               <p className="text-sm text-emerald-700 mt-2 font-medium">Your resume has been successfully parsed and routed to the HR pipeline.</p>
             </motion.div>
           ) : !isProfileComplete ? (
-            // GATEKEEPER: Profile Incomplete
             <div className="text-center py-4">
               <div className="w-16 h-16 bg-amber-50 border border-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <AlertCircle size={28} className="text-amber-600" />
