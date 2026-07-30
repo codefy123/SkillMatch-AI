@@ -44,7 +44,9 @@ const Signup = ({ setUser }) => {
     setIsLoading(true);
 
     try {
-      const signupResponse = await fetch('http://localhost:5000/api/auth/signup', {
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
+      const signupResponse = await fetch(`${BACKEND_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +71,7 @@ const Signup = ({ setUser }) => {
         throw new Error(signupData.error || 'Failed to register account');
       }
 
-      const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
+      const loginResponse = await fetch(`${BACKEND_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
